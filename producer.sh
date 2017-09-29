@@ -1,11 +1,14 @@
 #!/bin/bash
 
+# for i in Geolife/Data/* ; do
+#   if [ -d "$i" ]; then
+#     sed -e '1d' $i/Trajectory/*.plt > $i/Trajectory/all.plt
+#   fi
+# done
 
-sed -i -e '1,6d' Data/*/Trajectory/*.plt
 
-for folders in (ls Data); do
-	UID = folders
-	find Trajectory/*.plt -type f -exec sed -e '1,6d' {} \; > $UID.txt # s/$/{$UID}/
+for i in Geolife/Data/* ; do
+  if [ -d "$i" ]; then
+    python producer_single.py $i/Trajectory/all.plt
+  fi
 done
-
-# python producer.py ${FILE}

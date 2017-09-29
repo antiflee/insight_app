@@ -3,6 +3,10 @@ import redis, time, random
 import numpy as np
 import scipy.sparse as sp
 import sklearn.preprocessing as pp
+from config import *
+
+# functions to perform redis queries and do benchmark/performance checking
+
 
 def timeit(method):
 
@@ -72,20 +76,6 @@ def find_all_groups():
 
 	t4=time.time()
 	print len(users), len(groups), 'time:', t4-t3
-
-	
-	# for g in groups:
-	# 	g_set = set([i.uid for i in g])
-	# 	for u in g:
-	# 		if u.uid == 'user_8':
-	# 			print g
-	# 		# match = r.smembers('match:'+u.uid)
-	# 		match = r.zrevrange('match:'+u.uid, 0, -1)
-	# 		res = g_set.intersection(match)
-	# 		if len(res)>0:
-	# 			suggestions[u.uid] = res
-	# print time.time()-t4
-	# print suggestions['user_8']
 
 
 def jaccard_similarities(mat, u_ind=0):
@@ -183,7 +173,7 @@ if __name__ == '__main__':
 	similarity_thresh = 0.2
 
 	r = redis.StrictRedis(
-	    host='10.0.0.12',
+	    host=REDIS_ADDR,
 	    port=6379, 
 	    password='')
 

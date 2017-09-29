@@ -5,21 +5,17 @@ from confluent_kafka import Producer
 from config import *
 
 def produce_from_file(p,file_path):
+	uid = int(file_path.split('/')[-3])
 	with open(file_path, 'r') as input_file:
 		for i,line in enumerate(input_file):
-			if i > 10**5:
-				break
-			if i % 1000 == 0:
-				time.sleep(5)
+			time.sleep(2)
 			msg_items = line.strip().split(',')
 			lat = msg_items[0]
 			lon = msg_items[1]
-			uid = str(random.choice(range(10**5)))
-			msg = '{"uid":"user_'+uid+'","long":"'+lon+'","lat":"'+lat+'","time":"'+str(datetime.datetime.now())+'"}'
+			msg = '{"uid":"user_'+str(uid)+'","long":"'+lon+'","lat":"'+lat+'","time":"'+str(datetime.datetime.now())+'"}'
 			
 			# if verbose:
 			# 	print msg
-			
 			p.produce('topic1', msg)
 	p.flush()
 
