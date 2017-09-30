@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 import json
 
 # Create your views here.
@@ -75,6 +75,8 @@ def generate_interest(r, n_user=100, n_interest=100):
 		r.lpush('interests:user_'+str(i),  *ins)
 
 
+def slides(request):
+	return redirect("https://docs.google.com/presentation/d/11_fOv9bDV4DHhoHI7ZA2kljsHNaaE-diLzAFMTXxtp4/edit?usp=sharing")
 
 def index(request):
 	return render(request, 'user/index.html', None)
