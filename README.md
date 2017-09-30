@@ -1,5 +1,4 @@
-# insight_app
-Introduce
+# Introduce - an insight app 
 
 Don't wait for an intorduction!
 
