@@ -14,7 +14,7 @@ Don't wait for an intorduction!
 In this project I implemented the pipeline for an application named Introduce.
 
 The goal of the app is to connect people with same mindset. The challenge is to find the similarities between interests of users when they are nearby eachother. as for data I keep recieve geolocations of users and process them through the pipeline in a way to make sure that queries to find the groups of people and find match suggestions would be as efficeint as possible.
-<img src="./img/demo.png" width="900">
+<img src="./img/demo2.png" width="900">
 <!-- ![alt text](https://raw.githubusercontent.com/maminnas/d3-LDA-over-time/img/graph-screenshot.png) -->
 
 # Pipeline
@@ -24,7 +24,7 @@ As you can see the piple is designed to ingest 100,000 geolocations per 5 second
 
 The results of similar matches is represented in a table along with distance and similarity score. This similarity score is calculated by Jaccard similarity coefficient. You can also see the nearby people and similar users on the map.
 
-[Here is the demo.](http://moin.fun/app1/)
+[Here is the demo.](http://moin.fun/introduce/)
 
 # Dependencies
 

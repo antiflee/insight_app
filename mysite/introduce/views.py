@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from django.shortcuts import render, redirect
 import json
+from Queue import PriorityQueue as pq
 
 # Create your views here.
 
@@ -86,8 +87,11 @@ def get_user_info(request):
 	if not(request.is_ajax() and request.POST):
 		raise Http404
 
+	n_suggest=5
 	similarity_thresh = 0.3
 	result = []
+
+	heap = pq(maxsize=n_suggest)
 	uid = request.POST.get('uid')
 
 	print 'uid:', uid
@@ -103,7 +107,17 @@ def get_user_info(request):
 		group_interests = jaccard_first_member(m)[0]
 		for i, u in enumerate(g[1:]):
 			if group_interests[i+1]>=similarity_thresh:
-				result += [(u[0], u[1],group_interests[i+1])]
+				if heap.full():
+					if heap.queue[0][0] < group_interests[i+1]:
+						heap.get()
+						heap.put((group_interests[i+1], u[0], u[1]))
+				else:
+					heap.put((group_interests[i+1], u[0], u[1]))
+				# result += [(u[0], u[1],group_interests[i+1])]
+		while not heap.empty():
+			a = heap.get()
+			result+=[(a[1], a[2], a[0])]
+		result = result[::-1]
 		f = {'uid': uid, 'result':result[:5], 'group':g,'more_people':g2}
 	except:
 		f = f = {'uid': uid, 'result':[], 'group':[],'more_people':[]}

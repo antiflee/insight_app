@@ -89,13 +89,13 @@
 <div class="row">
 	<!-- col-lg-offset-1  -->
 	<div class="col-lg-4" style="margin-left: 50px;"> 
-		<form class="form-inline">
+		<!-- <form class="form-inline"> -->
 			<div class="form-group">
 				<label>Pick a user?</label>
 				<input id="uid_input" class="form-control" type="text" name="uid_input" placeholder="user_25">
 				<!-- <button id="input_btn" type="submit" onclick="showResult()" class="btn btn-primary">Submit</button> -->
 			</div>
-		</form>
+		<!-- </form> -->
 		<button id="input_btn" onclick="" class="btn btn-primary">Submit</button>
 
 		{% csrf_token %}
@@ -121,8 +121,14 @@
 	</div>
 </div>
     <script>
+    	$("#uid_input").keyup(function(event){
+	    if(event.keyCode == 13){
+	        $("#input_btn").click();
+	    }
+		});
       var map;
       var markersArray = [];
+      var rangeCircle = [];
       function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
           zoom: 15,
@@ -135,8 +141,13 @@
 		  for (var i = 0; i < markersArray.length; i++ ) {
 		    markersArray[i].setMap(null);
 		  }
+		  for (var i = 0; i < rangeCircle.length; i++ ) {
+		    rangeCircle[i].setMap(null);
+		  }
 		  markersArray.length = 0;
+		  rangeCircle.length = 0;
 		}
+
       $(document).ready(function() {
 				$('#input_btn').click(function(){
 					$.ajax({
@@ -159,9 +170,29 @@
 
       						var bounds = new google.maps.LatLngBounds();
 
-							for(var i=0;i<response["more_people"].length;i++){
+							for(var i=response["more_people"].length-1;i>-1;i--){
 								var color = 'red'
-								if (i==0) color='blue';
+								for(j=0;j<response["result"].length; j++){
+									if(response["more_people"][i][0]==response["result"][j][0]){
+										color='green';
+									}
+								}
+								if (i==0){
+									var center_coords = response["more_people"][i][1]
+						        	var center_latLng = new google.maps.LatLng(center_coords[1], center_coords[0]);
+									var range = new google.maps.Circle({
+						            strokeColor: '#0022FF',
+						            strokeOpacity: 0.55,
+						            strokeWeight: 2,
+						            fillColor: '#0099BB',
+						            fillOpacity: 0.35,
+						            map: map,
+						            center: center_latLng,
+						            radius: 10
+						          });
+									rangeCircle.push(range);
+									color='blue';
+								}
 								var coords = response["more_people"][i][1]
 						        var latLng = new google.maps.LatLng(coords[1], coords[0]);
 						        var marker = new google.maps.Marker({
